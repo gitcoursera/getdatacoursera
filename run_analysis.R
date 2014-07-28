@@ -31,9 +31,7 @@ length(fileTrain) # [1] 7352
 trainSetTable <- read.table(textConnection(fileTrain)) # testSetTable
 dim(trainSetTable)   # [1] 7352  561
 
-# Getting all features names and renaming the columns
-features <- readLines("features.txt")
-
+# Renaming columns
 for(i in 1:length(names(trainSetTable))) {
   names(trainSetTable)[i] <- features[i]
 }
