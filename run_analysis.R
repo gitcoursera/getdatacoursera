@@ -1,3 +1,22 @@
+activityDesc <- function(table) {
+  for (i in 1:length(table$Activity)) { 
+    if (table$Activity[i] == 1) table$Activity[i] = "WALKING"
+    if (table$Activity[i] == 2) table$Activity[i] = "WALKING_UPSTAIRS"
+    if (table$Activity[i] == 3) table$Activity[i] = "WALKING_DOWNSTAIRS"
+    if (table$Activity[i] == 4) table$Activity[i] = "SITTING"
+    if (table$Activity[i] == 5) table$Activity[i] = "STANDING"
+    if (table$Activity[i] == 6) table$Activity[i] = "LAYING"
+  }
+  table
+}
+
+renameColNames <- function(table) {
+  for(i in 1:length(names(table))) {
+    names(table)[i] <- features[i]
+  }
+  table
+}
+
 # Read test set
 fileTest <- readLines("test//X_test.txt")
 length(fileTest) # [1] 2947
@@ -6,15 +25,15 @@ dim(testSetTable)   # [1] 2947  561
 
 # Getting all features names and renaming the columns
 features <- readLines("features.txt")
+testSetTable <- renameColNames(testSetTable)
 
-for(i in 1:length(names(testSetTable))) {
-  names(testSetTable)[i] <- features[i]
-}
-
+# Reading labels
 fileTestLabels <- readLines("test//y_test.txt")
 testLabelTable <- read.table(textConnection(fileTestLabels))
 nrow(testLabelTable)   # [1] 2947
 names(testLabelTable) <- "Activity"
+# Descriptive activity names
+testLabelTable <- activityDesc(testLabelTable)
 
 fileSubj <- readLines("test//subject_test.txt")
 testSubjTable <- read.table(textConnection(fileSubj))
@@ -32,14 +51,14 @@ trainSetTable <- read.table(textConnection(fileTrain)) # testSetTable
 dim(trainSetTable)   # [1] 7352  561
 
 # Renaming columns
-for(i in 1:length(names(trainSetTable))) {
-  names(trainSetTable)[i] <- features[i]
-}
+trainSetTable <- renameColNames(trainSetTable)
 
 fileTrainLabels <- readLines("train//y_train.txt")
 trainLabelTable <- read.table(textConnection(fileTrainLabels))
 nrow(trainLabelTable) 
 names(trainLabelTable) <- "Activity"
+# Descriptive activity names
+trainLabelTable <- activityDesc(trainLabelTable)
 
 fileSubj <- readLines("train//subject_train.txt")
 trainSubjTable <- read.table(textConnection(fileSubj))
